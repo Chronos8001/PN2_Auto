@@ -11,8 +11,16 @@
 <div class="container">
     <h1>Pavillon Noir 2 - Gestion des Actions de Groupe</h1>
 
+    <!-- Onglets de Navigation -->
+    <div class="tabs-nav">
+        <button class="tab-button active" onclick="switchTab('tab-opposition')">📊 Opposition & Actions</button>
+        <button class="tab-button" onclick="switchTab('tab-groupe')">👥 Test de Groupe</button>
+        <button class="tab-button" onclick="switchTab('tab-navire')">⛵ Dégâts & Équipage</button>
+    </div>
+
     <!-- 1. TESTS D'OPPOSITION & ACTIONS NUMERIQUES -->
-    <div class="section">
+    <div id="tab-opposition" class="tab-content active-content">
+        <div class="section">
         <h2>1. Résolution d'Action & Opposition</h2>
         <p style="font-size: 0.85em; text-align: center;">Entrez les succès des deux camps et la mesure initiale pour appliquer automatiquement la table.</p>
         
@@ -32,10 +40,12 @@
         </div>
 
         <div class="result-box" id="resultatOpposition"></div>
+        </div>
     </div>
 
     <!-- 2. SIMULATEUR DE TEST DE GROUPE (CORRIGÉ & COMPLET) -->
-    <div class="section">
+    <div id="tab-groupe" class="tab-content">
+        <div class="section">
         <h2>2. Simulateur de Test de Groupe</h2>
         <div class="grid-2">
             <div>
@@ -67,6 +77,148 @@
         <div id="zoneOfficiers"></div>
 
         <div class="result-box" id="resultatTest"></div>
+        </div>
+    </div>
+
+    <!-- 3. GESTION DES DÉGÂTS ET ÉQUIPAGE DU NAVIRE -->
+    <div id="tab-navire" class="tab-content">
+        <div class="section">
+        <h2>3. Gestion des Dégâts & Équipage</h2>
+        
+        <!-- Configuration du Navire -->
+        <div class="card bg-paper">
+            <h3>Configuration du Navire</h3>
+            <div class="grid-3">
+                <div>
+                    <label for="presetNavire">Navire Type :</label>
+                    <select id="presetNavire" onchange="appliquerPresetNavire()">
+                        <option value="espadon" selected>Frégate L'Espadon (125 PS)</option>
+                        <option value="chaloupe">Chaloupe (10 PS)</option>
+                        <option value="corvette">Corvette (80 PS)</option>
+                        <option value="galion">Galion (250 PS)</option>
+                        <option value="personnalise">Personnalisé (Saisie libre)</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="maxPSMature">PS Max Mâture :</label>
+                    <input type="number" id="maxPSMature" value="125" min="1" oninput="mettreAJourMaxPS()">
+                </div>
+                <div>
+                    <label for="maxPSCoque">PS Max Coque :</label>
+                    <input type="number" id="maxPSCoque" value="125" min="1" oninput="mettreAJourMaxPS()">
+                </div>
+            </div>
+            
+            <div style="margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                    <label for="methodeSeuils">Méthode de calcul des seuils :</label>
+                    <select id="methodeSeuils" onchange="recalculerTout()">
+                        <option value="table" selected>Table des Mesures (Décélations -1, -2, -4, -7)</option>
+                        <option value="direct">Calcul direct (4/5, 3/5, 2/5, 1/5 de PS)</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Qualités Nautiques (Optionnel) :</label>
+                    <div class="checkbox-grid">
+                        <label class="check-item"><input type="checkbox" id="qualiteRapide" onchange="recalculerTout()"> Rapide (+1 Vit)</label>
+                        <label class="check-item"><input type="checkbox" id="qualiteManiable" onchange="recalculerTout()"> Maniable (+1 Man)</label>
+                        <label class="check-item"><input type="checkbox" id="qualiteMauvaiseCarene" onchange="recalculerTout()"> Carene/Voiles (-1 Vit)</label>
+                        <label class="check-item"><input type="checkbox" id="qualiteTropMou" onchange="recalculerTout()"> Mou/Ardent (-1 Man)</label>
+                        <label class="check-item"><input type="checkbox" id="qualiteMalFoutu" onchange="recalculerTout()"> Mal foutu (-2 Man)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Environnement & Gréement -->
+        <div class="card bg-paper" style="margin-top: 15px;">
+            <h3>Navigation & Voilure</h3>
+            <div class="grid-2">
+                <div>
+                    <label for="voilureChoisie">Voilure / Quantité de toile :</label>
+                    <select id="voilureChoisie" onchange="recalculerTout()">
+                        <option value="tres_sous_toile">Très sous-toilé (Vit -2 / Man +2)</option>
+                        <option value="sous_toile">Sous-toilé (Vit -1 / Man +1)</option>
+                        <option value="normale" selected>Normale (Vit +0 / Man +0)</option>
+                        <option value="surtoile">Surtoilé (Vit +1 / Man -2) [Gros temps: Test Tenue]</option>
+                        <option value="tres_surtoile">Très surtoilé (Vit +2 / Man -4) [Gros temps: Test Tenue]</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="forceVent">Force du Vent :</label>
+                    <select id="forceVent" onchange="recalculerTout()">
+                        <option value="calme">Calme plat (Vit +0 / Man +0) [Avirons requis]</option>
+                        <option value="petit">Petit temps (Vit -1 / Man +0) [Pas de gros temps]</option>
+                        <option value="etabli" selected>Établi (Vit +0 / Man +0)</option>
+                        <option value="frais">Frais (Vit +1 / Man -1)</option>
+                        <option value="grand_frais">Grand frais (Vit +2 / Man -3) [Test Tenue]</option>
+                        <option value="tempete">Tempête (Vit +3 / Man -4) [Test Tenue, pas sous-toilé]</option>
+                        <option value="ouragan">Ouragan (Vit +4 / Man -6)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mâture (3 localisations) -->
+        <div style="margin-top: 15px;">
+            <h3>État de la Mâture (Misaine, Grand Mât, Artimon)</h3>
+            <div class="grid-3" id="listeMature">
+                <!-- Généré dynamiquement -->
+            </div>
+        </div>
+
+        <!-- Coque (4 localisations) -->
+        <div style="margin-top: 15px;">
+            <h3>État de la Coque & Artillerie</h3>
+            <div class="grid-2" id="listeCoque">
+                <!-- Généré dynamiquement -->
+            </div>
+        </div>
+
+        <!-- Équipage et Recharge -->
+        <div class="card bg-paper" style="margin-top: 15px;">
+            <h3>Santé de l'Équipage & Recharge</h3>
+            <div class="grid-2">
+                <div>
+                    <h4>1. Calcul des Cases de Santé</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px;">
+                        <div>
+                            <label for="modifCombat">Modif. Combat :</label>
+                            <input type="number" id="modifCombat" value="0" oninput="calculerSanteEquipage()">
+                        </div>
+                        <div>
+                            <label for="modifRecharge">Modif. Recharge :</label>
+                            <input type="number" id="modifRecharge" value="0" oninput="calculerSanteEquipage()">
+                        </div>
+                    </div>
+                    <div class="result-box-inner" id="casesSanteEquipage">
+                        <!-- Cases de santé calculées -->
+                    </div>
+                </div>
+                <div>
+                    <h4>2. Malus de Recharge (Membres d'équipage)</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px;">
+                        <div>
+                            <label for="artilleursRequis">Artilleurs Requis :</label>
+                            <input type="number" id="artilleursRequis" value="34" min="1" oninput="calculerMalusRecharge()">
+                        </div>
+                        <div>
+                            <label for="artilleursActifs">Artilleurs Actifs :</label>
+                            <input type="number" id="artilleursActifs" value="34" min="0" oninput="calculerMalusRecharge()">
+                        </div>
+                    </div>
+                    <div class="result-box-inner" id="resultatMalusRecharge">
+                        <!-- Malus de recharge calculé -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tableau de Bord Final -->
+        <div class="dashboard-box" id="dashboardFinal" style="margin-top: 15px;">
+            <!-- État Général Mâture, Coque, Modificateurs finaux -->
+        </div>
+        </div>
     </div>
 
 </div>

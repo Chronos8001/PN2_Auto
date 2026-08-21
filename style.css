@@ -81,3 +81,347 @@ input, select {
     font-size: 0.95em;
     line-height: 1.5;
 }
+
+/* Nouvelles classes pour la gestion des dégâts du navire */
+.card {
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 12px;
+}
+
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 8px;
+    background: #fff;
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+.check-item {
+    font-weight: normal;
+    font-size: 0.85em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    user-select: none;
+    margin: 0;
+}
+
+.check-item input {
+    width: auto;
+    margin: 0;
+}
+
+.loc-card {
+    background: #fff8e7;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.loc-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.loc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(181, 154, 99, 0.3);
+    padding-bottom: 5px;
+    margin-bottom: 8px;
+}
+
+.loc-title {
+    font-weight: bold;
+    font-size: 0.95em;
+    color: var(--text-color);
+}
+
+.loc-badge {
+    font-size: 0.75em;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Couleurs des badges d'état */
+.badge-ok { background-color: #d1ebd5; color: #2d7a43; border: 1px solid #a3d9ac; }
+.badge-leger { background-color: #fff2cc; color: #b38600; border: 1px solid #ffe599; }
+.badge-serieux { background-color: #ffe5cc; color: #b25e00; border: 1px solid #f9cb9c; }
+.badge-grave { background-color: #ffd9cc; color: #b23000; border: 1px solid #f4cccc; }
+.badge-critique { background-color: #fcdad7; color: #8b0000; border: 1px solid #f3b4af; }
+.badge-ponton { background-color: #e0e0e0; color: #333333; border: 1px solid #cccccc; }
+.badge-coule { background-color: #111111; color: #ffffff; border: 1px solid #000000; }
+
+.ps-bar-container {
+    background: #e9ecef;
+    border-radius: 4px;
+    height: 10px;
+    width: 100%;
+    overflow: hidden;
+    margin: 8px 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.ps-bar {
+    height: 100%;
+    width: 100%;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* Couleurs des jauges de vie */
+.bar-ok { background-color: #2d7a43; }
+.bar-leger { background-color: #ddb012; }
+.bar-serieux { background-color: #e67e22; }
+.bar-grave { background-color: #d35400; }
+.bar-critique { background-color: #c0392b; }
+.bar-ponton { background-color: #7f8c8d; }
+.bar-coule { background-color: #000000; }
+
+.loc-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.loc-controls input[type="number"] {
+    margin-bottom: 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+.btn-ps {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+
+.btn-ps:hover {
+    background: var(--accent-hover);
+}
+
+.btn-repair {
+    background: #5d4037;
+    color: #fff;
+    border: none;
+    padding: 5px 8px;
+    font-size: 0.75em;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.2s;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.btn-repair:hover {
+    background: #3e2723;
+}
+
+.critical-flag-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+    background: rgba(0,0,0,0.03);
+    padding: 4px;
+    border-radius: 4px;
+    border: 1px dashed var(--border-color);
+}
+
+.critical-flag-group span {
+    font-size: 0.75em;
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+.critical-flags {
+    display: flex;
+    gap: 4px;
+}
+
+.critical-flags label {
+    font-size: 0.75em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+.critical-flags input[type="checkbox"] {
+    width: auto;
+    margin: 0 2px 0 0;
+}
+
+.result-box-inner {
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 10px;
+    min-height: 80px;
+    font-size: 0.9em;
+    line-height: 1.4;
+    overflow-y: auto;
+}
+
+.dashboard-box {
+    background: #2c1810;
+    color: #f4ebd0;
+    border: 3px double var(--border-color);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.dashboard-title {
+    text-align: center;
+    font-variant: small-caps;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--border-color);
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 5px;
+}
+
+.dashboard-stat {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(181, 154, 99, 0.4);
+    border-radius: 4px;
+    padding: 10px;
+    text-align: center;
+}
+
+.dashboard-stat-val {
+    font-size: 2em;
+    font-weight: bold;
+    color: #fff;
+    margin: 5px 0;
+}
+
+.dashboard-alert {
+    grid-column: 1 / -1;
+    background: #7f1d1d;
+    border: 1px solid #f87171;
+    color: #fca5a5;
+    padding: 8px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.9em;
+    animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+    0% { opacity: 0.85; }
+    50% { opacity: 1; background-color: #991b1b; }
+    100% { opacity: 0.85; }
+}
+
+.crew-health-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #444;
+    background: #fff;
+    margin-right: 4px;
+    cursor: pointer;
+    font-size: 0.75em;
+    font-weight: bold;
+    color: #b23000;
+    user-select: none;
+    border-radius: 2px;
+}
+
+.crew-health-box.checked {
+    background: #b23000;
+    color: #fff;
+}
+
+/* Onglets de Navigation */
+.tabs-nav {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+.tab-button {
+    background: #fff8e7;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    padding: 10px 18px;
+    font-family: inherit;
+    font-size: 0.95em;
+    font-weight: bold;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tab-button:hover {
+    background: var(--container-bg);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.tab-button.active {
+    background: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 10px rgba(139,0,0,0.3);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active-content {
+    display: block;
+    animation: tabFadeIn 0.35s ease-in-out;
+}
+
+@keyframes tabFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
